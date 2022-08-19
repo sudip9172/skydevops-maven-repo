@@ -24,7 +24,7 @@ pipeline {
             steps {
                // update your tomcat server ip accordingly in below command
                sh "scp target/maven-web-application.war  ec2-user@34.224.26.69:/opt/tomcat9/webapps/"
-              echo 
+            
 		   
             }
         }
