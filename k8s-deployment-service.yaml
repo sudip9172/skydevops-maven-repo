@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sky-devops-deployment-cicd_jenkins
+  name: sky-devops-deployment
   labels:
     app: my-app
 spec:
