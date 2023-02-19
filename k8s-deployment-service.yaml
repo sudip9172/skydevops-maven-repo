@@ -19,7 +19,7 @@ spec:
       - name: ravi-docker-registry
       containers:
       - name: skydevops-container
-        image: ravirekha1/skydevopsapp:7
+        image: ravirekha1/skydevopsapp:13
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
