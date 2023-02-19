@@ -1,0 +1,21 @@
+pipeline {
+  agent {
+  label 'my_slave1'
+  }
+  stages{
+    stage ('Checkout SCM') {
+          steps {
+			 git branch: 'main', url: 'https://github.com/ravirekha/skydevops-maven-repo.git'
+            }
+        }    
+	
+	 stage('Deploying App to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "k8s-deployment-service.yaml", kubeconfigId: "kubernetes-deployment")
+        }
+      }
+    }
+	
+  }
+} 
