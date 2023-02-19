@@ -1,34 +1,57 @@
 pipeline {
-    // add your slave label name
-    agent { label 'my_slave1'}
-    tools{
-        maven 'maven3.8.6'
+  environment {
+    VERSION = "${env.BUILD_ID}"
+    dockerimagename = "ravirekha1/skydevopsapp"
+    registry = "https://hub.docker.com/"
+    registryCredential = 'my-docker-private-id'
+    dockerImage = ""	  
+	  
     }
-    stages {
-        stage ('Checkout SCM') {
-
-            steps {
-			    git branch: 'main', url: 'https://github.com/sushmitha2506/skydevops-maven-repo.git'
+	tools{
+        maven 'maven3.9.0'
+    }
+  agent {
+  label 'my_slave1'
+  }
+  stages{
+    stage ('Checkout SCM') {
+          steps {
+			 git branch: 'main', url: 'https://github.com/ravirekha/skydevops-maven-repo.git'
             }
-        }
-
-        stage ('Build') {
+        }    
+	
+	stage ('Build Package') {
 
             steps {
                sh 'mvn clean package'
             }
         }
-        
-        stage ('deploy') {
-
-            steps {
-               // update your tomcat server ip accordingly in below command
-               sh "scp target/maven-web-application.war  ec2-user@34.224.26.69:/opt/tomcat9/webapps/"
-            
-		   
+	stage('SonarQube analysis') {
+        steps{
+          withSonarQubeEnv('Sonar-server') { 
+             sh "mvn sonar:sonar"
             }
-        }
+          }
+		}
 
-        
+    stage('Building image') {
+      steps{
+        script {
+         
+          dockerImage = docker.build dockerimagename
+       }
+      }
     }
+    stage('Pushing Image') {
+      steps{
+        script {
+          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+              dockerImage.push("${env.BUILD_NUMBER}")
+  //          dockerImage.push("latest")
+             
+          }
+        }
+      }
+    }
+  }
 }
