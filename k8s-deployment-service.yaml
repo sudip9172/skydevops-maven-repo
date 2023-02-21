@@ -16,10 +16,10 @@ spec:
         app: my-app
     spec:
       imagePullSecrets:
-      - name: ravi-docker-registry
+      - name: sudeepwin
       containers:
       - name: skydevops-container
-        image: ravirekha1/skydevopsapp:13
+        image: sudeepwin/sudip:1
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
