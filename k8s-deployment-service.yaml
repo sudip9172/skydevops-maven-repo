@@ -16,7 +16,7 @@ spec:
         app: my-app
     spec:
       imagePullSecrets:
-      - name: sudeepwin
+      - name: my-secret
       containers:
       - name: skydevops-container
         image: sudeepwin/sudip:1
